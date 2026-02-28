@@ -1,18 +1,18 @@
 #include <Arduino.h>
-
-// put function declarations here:
-int myFunction(int, int);
+#include "components/display/display.h"
+#include "components/button/button.h"
+#include "freertos/FreeRTOS.h"
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  screen_setup();    //initialize/setup screen
+  tft.fillRect(10, 10, 120, 120, WHITE);
+  pinMode(13,OUTPUT);
+  Serial.begin(9600);
+  digitalWrite(13,HIGH);
+
+  xTaskCreate(button_task,"button",1024,NULL,1,NULL); 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  
 }

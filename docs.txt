@@ -1,0 +1,10 @@
+File and folder structure:
+
+src
+  main  //folder utama yang akan di jalankan
+  Components  //kumpulan fungsi /libray kustom  dan global variabel
+  Ui  //kumpulan fungsi / library kustom untuk membuat antarmuka sederhana pada program
+  programs  //kumpulan program/aplikasi
+
+
+Sistem penamaan variabel: underscore
