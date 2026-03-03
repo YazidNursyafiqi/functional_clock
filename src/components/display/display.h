@@ -19,7 +19,8 @@ extern const uint16_t PINK;
 
 extern Adafruit_ST7789 tft;
 
-extern void text_align_center(String text,int posY,uint16_t color,uint8_t textSize);
+
+extern void screen_backlight_set(bool is_on);
 extern void screen_setup();
 
 #endif

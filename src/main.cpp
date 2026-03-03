@@ -1,7 +1,17 @@
 #include <Arduino.h>
 #include "components/display/display.h"
 #include "components/button/button.h"
+#include "components/time/time.h"
+#include "components/homepage/homepage.h"
+
+//multithreading components
 #include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+
+//declare all semaphore variables
+SemaphoreHandle_t xbutton;
+SemaphoreHandle_t xtime;
+
 
 void setup() {
   screen_setup();    //initialize/setup screen
@@ -10,7 +20,17 @@ void setup() {
   Serial.begin(9600);
   digitalWrite(13,HIGH);
 
-  xTaskCreate(button_task,"button",1024,NULL,1,NULL); 
+  //semaphore mutex setup
+  xbutton = xSemaphoreCreateMutex();
+  xtime = xSemaphoreCreateMutex();
+
+  //time initialization
+  time_setup();
+
+  //running startup programs
+  xTaskCreate(button_task,"button",2048,NULL,1,NULL); 
+  xTaskCreate(homepage_task,"homepage",2048,NULL,1,NULL); 
+
 }
 
 void loop() {

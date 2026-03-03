@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include "button.h"
+#include "freertos/semphr.h"
 
 //tombol yang di tekan sekarang
-uint8_t button_now = 0;
+uint8_t button_condition = 0;
 
 //deklarasikan semua pin button
 #define BTN_LEFT 34
@@ -31,16 +32,30 @@ void button_task(void *param){
         lebih tombol di tekan secara bersamaan maka yang valid adalah tombol dengan 
         urutan paling awal (dari indeks 0)*/
 
-        for(int i = 0 ; i < 5 ; i++){
-            if(btn_now[i]){
-                button_now = i+1;
-                break;
-            }else{
-                button_now = 0;
+        if(xSemaphoreTake(xbutton,portMAX_DELAY)){
+            for(int i = 0 ; i < 5 ; i++){
+                if(btn_now[i]){
+                    button_condition = i+1;
+                    break;
+                }else{
+                    button_condition = 0;
+                }
             }
+            
+            //Serial.printf("Button: %d \n",button_now); //for debugging only!
+            xSemaphoreGive(xbutton);
         }
 
-        Serial.printf("Button: %d \n",button_now);
         vTaskDelay(BTN_REFRESH_RATE_MS / portTICK_PERIOD_MS);
+
     }
+}
+
+uint8_t button_now(){
+    uint8_t x = 0;
+    if(xSemaphoreTake(xbutton,portMAX_DELAY)){
+        x = button_condition;
+        xSemaphoreGive(xbutton);
+    }
+    return x;
 }
