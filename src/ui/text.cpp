@@ -3,9 +3,18 @@
 #include "ui.h"
 
 //buat fungsi tambahan untuk display:
-void text_align_center(String text,int posY,uint16_t color,uint8_t textSize){
+void text_align_center(String text,int posY,uint16_t color,uint8_t textSize,uint8_t font){
   int16_t x1, y1;
   uint16_t w , h;
+
+  switch(font){
+    case 0:
+      tft.setFont();
+      break;
+    case 1:
+      tft.setFont(&FreeSansBold12pt7b);
+      break;
+  }
 
   tft.setTextSize(textSize);
   tft.getTextBounds(text, 0, posY, &x1, &y1, &w, &h);

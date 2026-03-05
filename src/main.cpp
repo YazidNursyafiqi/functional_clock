@@ -29,7 +29,7 @@ void setup() {
 
   //running startup programs
   xTaskCreate(button_task,"button",2048,NULL,1,NULL); 
-  xTaskCreate(homepage_task,"homepage",2048,NULL,1,NULL); 
+  xTaskCreate(homepage_task,"homepage",4096,NULL,1,NULL); 
 
 }
 

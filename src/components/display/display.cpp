@@ -27,6 +27,6 @@ void screen_setup(){
   screen_backlight_set(1);
   tft.init(SCREEN_WIDTH, SCREEN_HEIGHT);
   tft.invertDisplay(0);
-  tft.setRotation(1);
+  tft.setRotation(3);
   tft.fillScreen(0x0000);
 }

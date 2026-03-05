@@ -5,25 +5,23 @@
 #include "components/button/button.h"
 
 //import ui elements
-#include "ui/text/text.h"
+
 
 //import semua page
-
+#include "pages/pages.h"
 
 uint8_t     page_now = 0;   //untuk menyimpan informasi di halaman apa sekarang (default 0=> home screen)
-uint8_t     page_total = 10;   //jumlah page
-uint8_t     task_menu_pointer  = 0; //aplikasi di menu pilihan task yang di pilih sekarang
-void        (*task_list_function[])() = {}; //array berisi list pointer ke task/program langusng
-String      task_list_name[] = {}; //array berisi list nama nama tiap program
+uint8_t     page_total = 2;   //jumlah page
+
 bool        booting = true; //true ketika awal booting
 bool        rendered = false; //true ketika page awal di render (berfungsi untuk menjalankan fungsi sekali render pada sebuah page)
-void        (*page_list[0])(bool&) = {}; //list fungsi tiap tiap page | parameternya adalah reference ke value rendered
+void        (*page_list[])(bool&) = {dashboard_page,task_menu_page}; //list fungsi tiap tiap page | parameternya adalah reference ke value rendered
 bool        page_changed = false; //bernilai tru selagi tombol masih di tekan dan false ketika tombol sudah di lepas
 
 
 void select_page(){
     uint8_t btn = button_now();
-    if(btn &&  !page_changed){
+    if(btn &&  !page_changed){ //jika rtombol di tekan dan page belum diubah
         page_changed = true;
         //switch case button kanan atau kiri untuk mengubah variabel page
         //1 : decrement | 5 : increment
@@ -60,7 +58,7 @@ void homepage_task(void *param){
     
     //loop
     while (true){
-        //page_list[page_now]; //hanya mengeksekusi fungsi page sesuai nomor page sekarang
+        page_list[page_now](rendered); //hanya mengeksekusi fungsi page sesuai nomor page sekarang
         
         select_page(); //fungsi untuk memeriksa kondisi tombol dan handle pergantian page
         
