@@ -1,15 +1,19 @@
 #include <Arduino.h>
+#include <FreeRTOSConfig.h>
 #include <ui/ui.h>
 #include <TimeLib.h>
 #include "pages.h"
 #include "components/button/button.h"
+#include "tasks/tasks.h" //semua fungsi task
 
 uint8_t     task_menu_pointer  = 0; //aplikasi di menu pilihan task yang di pilih sekarang
-void        (*task_list_function[])() = {}; //array berisi list pointer ke task/program langusng
-String      task_list_name[] = {"aaaa","bbbbbb","ccccc"}; //array berisi list nama nama tiap program
+void        (*task_list_function[])(void*) = {wifi_task}; //array berisi list pointer ke task/program langusng
+String      task_list_name[] = {"WiFi Scan","bbbbbb","ccccc"}; //array berisi list nama nama tiap program
 uint8_t     task_total = 3; //total keseluruhan program yang akan di tampilkan di list
 bool        changed = false; //bernilai true selama tombol di tekan dan belum di lepas
 uint8_t     task_pointer_now = 0; //task pilihan sekarang
+
+
 
 void select_task(){
     uint8_t btn = button_now();
@@ -58,6 +62,12 @@ void task_menu_page(bool &rendered){
 
     //loop
     select_task();
+    
+    //jalankan task ketika di pilih
+    if(button_now() == 3){
+        xTaskCreate(task_list_function[task_pointer_now],task_list_name[task_pointer_now].c_str(),4092,nullptr,1,NULL);
+        vTaskDelete(NULL);
+    }
 
 
 }

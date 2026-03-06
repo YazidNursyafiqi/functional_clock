@@ -65,6 +65,7 @@ void homepage_task(void *param){
         vTaskDelay(100 / portTICK_PERIOD_MS);
         
         /* -----------------------------debugging---------------------------------- */
-        Serial.printf("page: %d , button: %d\n",page_now,button_now());
+        //Serial.printf("page: %d , button: %d\n",page_now,button_now());
+        Serial.printf("%d : %d : %d / day : %d month : %d year : %d",hour(),minute(),second(),day(),month(),year());
     }
 }
